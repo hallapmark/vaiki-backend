@@ -51,8 +51,8 @@ public class DataSeeder {
                         .visible(true)
                         .build(),
                 Category.builder()
-                        .slug("anti-war")
-                        .title("Anti-War")
+                        .slug("war")
+                        .title("War")
                         .orderIndex(1)
                         .visible(true)
                         .build(),
@@ -86,7 +86,7 @@ public class DataSeeder {
                         .durationMinutes(152)
                         .posterUrl(cfPrefix + "/all-quiet-on-the-western-front-1930/poster.jpg")
                         .backdropUrl(cfPrefix + "/all-quiet-on-the-western-front-1930/backdrop.jpg")
-                        .categories(List.of("classics", "anti-war"))
+                        .categories(List.of("classics", "war"))
                         .director("Lewis Milestone")
                         .country("United States")
                         .hlsPath("/all-quiet-on-the-western-front-1930/master.m3u8")
