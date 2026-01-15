@@ -69,7 +69,7 @@ public class MovieController {
         return new PlaybackUrlResponse(result.url(), result.expiresAt());
     }
 
-    @GetMapping("/api/featured")
+    @GetMapping("/featured")
     public ResponseEntity<MovieDto> getFeatured() {
         return movieRepository.findFirstByFeaturedTrue()
                 .map(movie -> ResponseEntity.ok(MovieDto.from(movie)))
