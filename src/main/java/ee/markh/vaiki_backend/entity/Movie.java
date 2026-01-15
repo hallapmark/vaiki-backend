@@ -50,5 +50,11 @@ public class Movie {
     private String hlsPath;
 
     private boolean featured;
+
+    /**
+     * Optional text shown alongside the featured badge (e.g., "Public Domain Day 2026").
+     * Only relevant when featured = true.
+     */
+    private String featureText;
 }
 

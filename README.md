@@ -27,18 +27,6 @@ createdb vaiki
    - Save the private key file locally (do NOT commit it)
    - Update `dev.env` with the path to your private key
 
-### Private Key Format
-
-The AWS SDK v2 CloudFrontUtilities expects a **PKCS#8** PEM-formatted private key.
-
-If you have a PKCS#1 key (starts with `-----BEGIN RSA PRIVATE KEY-----`), convert it:
-
-```bash
-openssl pkcs8 -topk8 -inform PEM -in pkcs1.key -out pkcs8.pem -nocrypt
-```
-
-The resulting file should start with `-----BEGIN PRIVATE KEY-----`.
-
 ## Running
 
 ### Using Maven wrapper

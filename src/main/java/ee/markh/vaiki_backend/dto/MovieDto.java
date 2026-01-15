@@ -18,7 +18,8 @@ public record MovieDto(
         List<String> categories,
         String director,
         String country,
-        boolean featured
+        boolean featured,
+        String featureText
 ) {
     public static MovieDto from(Movie movie) {
         return new MovieDto(
@@ -32,7 +33,8 @@ public record MovieDto(
                 movie.getCategories(),
                 movie.getDirector(),
                 movie.getCountry(),
-                movie.isFeatured()
+                movie.isFeatured(),
+                movie.getFeatureText()
         );
     }
 }
