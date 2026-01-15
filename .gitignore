@@ -1,0 +1,25 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# IDE
+.idea/
+*.iws
+*.iml
+*.ipr
+.vscode/
+*.code-workspace
+
+# macOS
+.DS_Store
+
+# Environment/Secrets
+dev.env
+*.pem
+*.key
+
+# Logs
+*.log
+
