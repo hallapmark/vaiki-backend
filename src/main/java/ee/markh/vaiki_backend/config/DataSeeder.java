@@ -109,6 +109,20 @@ public class DataSeeder {
                         .country("United States")
                         .hlsPath("/his-girl-friday/master.m3u8")
                         .featured(false)
+                        .build(),
+
+                Movie.builder()
+                        .slug("charade-1963")
+                        .title("Charade")
+                        .year(1963)
+                        .description("A widow is pursued by several men who want her late husband's fortune; she teams up with a charming stranger.")
+                        .durationMinutes(113)
+                        .posterUrl(cfPrefix + "/charade-1963/poster.jpg")
+                        .categories(List.of("classics", "comedies"))
+                        .director("Stanley Donen")
+                        .country("United States")
+                        .hlsPath("/charade-1963/master.m3u8")
+                        .featured(false)
                         .build()
         );
 
