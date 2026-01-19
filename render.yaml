@@ -1,0 +1,60 @@
+services:
+  - type: web
+    name: vaiki-backend
+    env: docker
+    plan: starter
+    region: frankfurt
+    autoDeploy: true
+
+    buildCommand: ""
+    startCommand: ""
+
+    # sync: false means the Render dashboard will prompt us for the value on first deploy.
+    # 'prod,seed' (comma-separated, no space).
+    # Once seeded, change to 'prod' in the Dashboard and that will stop seeding logic.
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        sync: false
+
+      # Database - auto-populated from Render database
+      - key: DB_HOST
+        fromDatabase:
+          name: vaiki-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: vaiki-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: vaiki-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: vaiki-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: vaiki-db
+          property: password
+
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+
+      # Set manually in dashboard
+      - key: FRONTEND_URL
+        sync: false
+
+      # CloudFront signing - set manually in dashboard
+      - key: CLOUDFRONT_KEY_PAIR_ID
+        sync: false
+      - key: CLOUDFRONT_DOMAIN
+        sync: false
+      - key: CLOUDFRONT_URL_TTL_SECONDS
+        value: "3600"
+    runtime: docker
+
+databases:
+  - name: vaiki-db
+    plan: free
+    region: frankfurt
