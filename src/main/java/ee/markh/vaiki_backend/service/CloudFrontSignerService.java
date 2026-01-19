@@ -42,7 +42,7 @@ public class CloudFrontSignerService {
     /**
      * Generates a signed CloudFront URL for the given object path using a canned (predefined) policy.
      *
-     * @param objectPath       The S3 object path (e.g., "/movies/metropolis/master.m3u8")
+     * @param objectPath       The S3 object path (e.g., "/metropolis/master.m3u8")
      * @param expiresInSeconds TTL in seconds; if null, uses default from config
      * @return SignedUrlResult containing the signed URL and expiration timestamp
      */
