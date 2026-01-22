@@ -41,8 +41,8 @@ services:
       - key: SPRING_JPA_HIBERNATE_DDL_AUTO
         value: update
 
-      # Set manually in dashboard
-      - key: FRONTEND_URL
+      # Set manually in dashboard (comma-separated for multiple URLs, no spaces)
+      - key: FRONTEND_URLS
         sync: false
 
       # CloudFront signing - set manually in dashboard
