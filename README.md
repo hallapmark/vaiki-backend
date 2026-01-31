@@ -1,14 +1,64 @@
-# Vaiki Backend
+# Vaiki Retro Films Streamer — Backend
 
-Spring Boot backend for the Vaiki movie streaming platform.
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-3-6DB33F?logo=springboot&logoColor=white)
+![Java](https://img.shields.io/badge/Java-25-007396?logo=java&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4479A1?logo=postgresql&logoColor=white)
+
+Spring Boot backend for a demo adaptive bitrate streaming platform showcasing secure video delivery for a retro/classic film library. Built as a portfolio project to demonstrate full-stack streaming architecture with AWS media delivery.
+
+> 🎬 **[Live Demo](https://retro-films-c5171.web.app)** · 📦 **[Frontend Repository](https://github.com/hallapmark/vaiki-frontend)**
+
+---
+
+## Project Overview
+
+This backend provides REST APIs for movie metadata and generates time-limited signed URLs for secure HLS video streaming from AWS CloudFront. It handles the business logic layer between the React frontend and AWS infrastructure.
+
+### System Architecture
+
+```
+┌─────────────────┐                 ┌──────────────────┐
+│                 │                 │                  │
+│  React Frontend │◀────────────────│  Backend API     │
+│                 │  Signed URLs    │  (Render)        │
+│                 │                 │                  │
+└────────┬────────┘                 └──────────────────┘
+         │
+         │ HLS video streams
+         │ (using signed URLs)
+         │
+         ▼
+┌─────────────────────────────┐
+│          AWS                │
+│  S3 + CloudFront CDN        │
+│  (Media Storage + CDN)      │
+└─────────────────────────────┘
+```
+
+- **AWS S3 + CloudFront**: S3 stores HLS video segments; CloudFront provides low-latency CDN delivery with signed URL security
+- **PostgreSQL**: Movie metadata storage
+- **Spring Boot**: RESTful API with CloudFront URL signing service
+
+---
+
+## Features
+
+- **Secure Video Delivery** — CloudFront signed URL generation with configurable TTL
+- **Movie Catalog API** — RESTful endpoints for browsing and retrieving movie metadata
+- **Data Seeding** — Automatic database population with classic public domain films
+- **CORS Configuration** — Support for multiple frontend deployments
+
+---
 
 ## Requirements
 
 - Java 25
 - PostgreSQL (local dev)
-- AWS CloudFront private key (PKCS#8 PEM format)
+- AWS CloudFront private key
 
-## Configuration
+## Getting Started
+
+### Configuration
 
 1. Copy `dev.env.example` to `dev.env` and fill in values:
 
@@ -27,9 +77,9 @@ createdb vaiki
    - Save the private key file locally (do NOT commit it)
    - Update `dev.env` with the path to your private key
 
-## Running
+### Running
 
-### Using Maven wrapper
+#### Using Maven wrapper
 
 ```bash
 # Load env vars and run
@@ -37,9 +87,11 @@ set -a && source dev.env && set +a
 ./mvnw spring-boot:run
 ```
 
-### Using IDE
+#### Using IDE
 
 Configure your IDE to load environment variables from `dev.env`, then run `VaikiBackendApplication`.
+
+---
 
 ## API Endpoints
 
@@ -63,24 +115,24 @@ Configure your IDE to load environment variables from `dev.env`, then run `Vaiki
 ```json
 [
   {
-    "slug": "metropolis",
-    "title": "Metropolis",
-    "year": 1927,
+    "slug": "all-quiet-on-the-western-front-1930",
+    "title": "All Quiet on the Western Front",
+    "year": 1930,
     "description": "...",
-    "durationMinutes": 153,
+    "durationMinutes": 152,
     "posterUrl": "...",
     "backdropUrl": "...",
-    "categories": ["Classics", "Silent Cinema"],
-    "director": "Fritz Lang",
-    "country": "Germany"
+    "categories": ["War", "Drama"],
+    "director": "Lewis Milestone",
+    "country": "USA"
   }
 ]
 ```
 
-**GET /api/movies/metropolis/playback-url**
+**GET /api/movies/all-quiet-on-the-western-front-1930/playback-url**
 ```json
 {
-  "url": "https://d123abc.cloudfront.net/metropolis/master.m3u8?Expires=...&Signature=...&Key-Pair-Id=...",
+  "url": "https://d123abc.cloudfront.net/all-quiet-on-the-western-front-1930/master.m3u8?Expires=...&Signature=...&Key-Pair-Id=...",
   "expiresAt": "2026-01-15T14:30:00Z"
 }
 ```
@@ -94,6 +146,8 @@ SPRING_PROFILES_ACTIVE=dev,seed
 ```
 
 The seeder runs once on startup and only inserts data if the movies table is empty.
+
+---
 
 ## Project Structure
 
@@ -115,4 +169,17 @@ src/main/java/ee/markh/vaiki_backend/
 └── service/
     └── CloudFrontSignerService.java  # CloudFront URL signing
 ```
+
+---
+
+## Related
+
+- **Frontend**: [vaiki-frontend](https://github.com/hallapmark/vaiki-frontend) — React application with HLS video player
+- **Live Demo**: [retro-films-c5171.web.app](https://retro-films-c5171.web.app)
+
+---
+
+## Content Note
+
+All films featured in this demo are in the public domain, including classics such as _All Quiet on the Western Front_ (1930), _His Girl Friday_ (1940), and _Charade_ (1963).
 
