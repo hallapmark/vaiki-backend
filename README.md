@@ -6,7 +6,7 @@
 
 Spring Boot backend for a demo adaptive bitrate streaming platform showcasing secure video delivery for a retro/classic film library. Built as a portfolio project to demonstrate full-stack streaming architecture with AWS media delivery.
 
-> 🎬 **[Live Demo](https://retro-films-c5171.web.app)** · 📦 **[Frontend Repository](https://github.com/hallapmark/vaiki-frontend)**
+> 🎬 **[Live Demo on Amplify](https://main.d1kv8xolprj9bu.amplifyapp.com)** · 📦 **[Frontend Repository](https://github.com/hallapmark/vaiki-frontend)**
 
 ---
 
@@ -175,7 +175,7 @@ src/main/java/ee/markh/vaiki_backend/
 ## Related
 
 - **Frontend**: [vaiki-frontend](https://github.com/hallapmark/vaiki-frontend) — React application with HLS video player
-- **Live Demo**: [retro-films-c5171.web.app](https://retro-films-c5171.web.app)
+- **Live Demo**: **[https://main.d1kv8xolprj9bu.amplifyapp.com](https://main.d1kv8xolprj9bu.amplifyapp.com)**
 
 ---
 
