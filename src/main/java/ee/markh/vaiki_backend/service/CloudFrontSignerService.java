@@ -8,35 +8,67 @@ import software.amazon.awssdk.services.cloudfront.url.SignedUrl;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.KeyFactory;
+import java.security.PrivateKey;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Base64;
 
 @Service
 public class CloudFrontSignerService {
 
     private final String keyPairId;
-    private final Path privateKeyPath;
+    private final PrivateKey privateKey;
     private final String distributionDomain;
     private final int defaultTtlSeconds;
     private final CloudFrontUtilities cloudFrontUtilities;
 
     public CloudFrontSignerService(
             @Value("${app.cloudfront.key-pair-id}") String keyPairId,
-            @Value("${app.cloudfront.private-key-file}") String privateKeyFile,
+            @Value("${app.cloudfront.private-key-file:}") String privateKeyFile,
+            @Value("${app.cloudfront.private-key-content:}") String privateKeyContent,
             @Value("${app.cloudfront.domain}") String distributionDomain,
-            @Value("${app.cloudfront.url-ttl-seconds:3600}") int defaultTtlSeconds) {
+            @Value("${app.cloudfront.url-ttl-seconds:3600}") int defaultTtlSeconds) throws Exception {
 
         this.keyPairId = keyPairId;
-        this.privateKeyPath = Path.of(privateKeyFile);
+        this.privateKey = loadPrivateKey(privateKeyFile, privateKeyContent);
         this.distributionDomain = distributionDomain;
         this.defaultTtlSeconds = defaultTtlSeconds;
         this.cloudFrontUtilities = CloudFrontUtilities.create();
-        if (!Files.exists(privateKeyPath) || !Files.isReadable(privateKeyPath)) {
+    }
+
+    private static PrivateKey loadPrivateKey(String privateKeyFile, String privateKeyContent) throws Exception {
+
+        String pemContent;
+        if (privateKeyContent != null && !privateKeyContent.isBlank()) {
+            pemContent = privateKeyContent;
+        } else if (privateKeyFile != null && !privateKeyFile.isBlank()) {
+            Path keyPath = Path.of(privateKeyFile);
+            if (!Files.exists(keyPath) || !Files.isReadable(keyPath)) {
+                throw new IllegalStateException(
+                        "CloudFront private key file not readable: " + keyPath.toAbsolutePath()
+                );
+            }
+            pemContent = Files.readString(keyPath);
+        } else {
             throw new IllegalStateException(
-                    "CloudFront private key file not readable: " + privateKeyPath.toAbsolutePath()
+                    "Neither app.cloudfront.private-key-file nor app.cloudfront.private-key-content is configured"
             );
         }
+        return parsePrivateKey(pemContent);
+    }
 
+    private static PrivateKey parsePrivateKey(String pemContent) throws Exception {
+        String stripped = pemContent
+                .replace("-----BEGIN RSA PRIVATE KEY-----", "")
+                .replace("-----END RSA PRIVATE KEY-----", "")
+                .replace("-----BEGIN PRIVATE KEY-----", "")
+                .replace("-----END PRIVATE KEY-----", "")
+                .replaceAll("\\s", "");
+        byte[] keyBytes = Base64.getMimeDecoder().decode(stripped);
+        PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(keyBytes);
+        return KeyFactory.getInstance("RSA").generatePrivate(spec);
     }
 
     /**
@@ -54,7 +86,7 @@ public class CloudFrontSignerService {
 
         CannedSignerRequest signerRequest = CannedSignerRequest.builder()
                 .resourceUrl(resourceUrl)
-                .privateKey(privateKeyPath)
+                .privateKey(privateKey)
                 .keyPairId(keyPairId)
                 .expirationDate(expiresAt)
                 .build();
@@ -81,4 +113,3 @@ public class CloudFrontSignerService {
         }
     }
 }
-
