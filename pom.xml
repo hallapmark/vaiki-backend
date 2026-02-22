@@ -60,7 +60,12 @@
 			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
 
-		<!-- Database -->
+		<!-- Needed for AWS ALB -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
@@ -72,8 +77,7 @@
 			<groupId>software.amazon.awssdk</groupId>
 			<artifactId>cloudfront</artifactId>
 		</dependency>
-
-		<!-- Lombok -->
+		
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
