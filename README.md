@@ -17,12 +17,12 @@ This backend provides REST APIs for movie metadata and generates time-limited si
 ### System Architecture
 
 ```
-┌─────────────────┐                 ┌─────────────────────┐
-│                 │                 │                     │
-│  React Frontend │◀────────────────│  Backend API        │
-│                 │  Signed URLs    │  (AWS ALB + ECS/EC2)│
-│                 │                 │                     │
-└────────┬────────┘                 └─────────────────────┘
+┌─────────────────┐                 ┌──────────────────┐
+│                 │                 │                  │
+│  React Frontend │◀────────────────│  Backend API     │
+│                 │  Signed URLs    │  (Render)        │
+│                 │                 │                  │
+└────────┬────────┘                 └──────────────────┘
          │
          │ HLS video streams
          │ (using signed URLs)
